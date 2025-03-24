@@ -61,8 +61,7 @@ Key Variables:
 * `LICENSE`
     - Project license
 
-## Datasets:
-https://www.kaggle.com/datasets/hwaitt/horse-racing/data
+Key Variables:
 >>>>>>> origin/main
 
 3 Main CSV's
@@ -128,8 +127,61 @@ NOTES:
 Please be aware, the prices provided are the SP (starting prices), and they are not available before race starts. This means prices before start may differ from SP. But usually favorites stay the same, and prices on them often higher then SP. Anyway you can't predict profit with accuracy based only on SP prices.
 
 The listed horse weight is based on the handicap system and decides the weight the horse needs too carry in order to make the race more even, its very common in UK/IRE horse racing. It is not a measurement of the actual horses weight.
+### Demo
+... Show your work:
+...     Data visualizations
+...     Interactive demo (e.g., `streamlit` app)
+...     Short video of users trying out the solution
 
-<<<<<<< HEAD
+### Methodology
+... High-level diagrams of entire process:
+...     various data processing steps
+...     various modelling directions
+...     various prototyping directions
+
+#### Repository 
+
+* `data` 
+    - contains link to copy of the dataset (stored in a publicly accessible cloud storage)
+    - saved copy of aggregated / processed data as long as those are not too large (> 10 MB)
+
+* `model`
+    - `joblib` dump of final model(s)
+
+* `notebooks`
+    - contains all final notebooks involved in the project
+
+* `docs`
+    - contains final report, presentations which summarize the project
+
+* `references`
+    - contains papers / tutorials used in the project
+
+* `src`
+    - Contains the project source code (refactored from the notebooks)
+
+* `.gitignore`
+    - Part of Git, includes files and folders to be ignored by Git version control
+
+* `conda.yml`
+    - Conda environment specification
+
+* `README.md`
+    - Project landing page (this page)
+
+* `LICENSE`
+    - Project license
+
+#### Dataset
+
+... Google Drive links to datasets and pickled models
+
+### Credits & References
+
+... Include any personal learning
+=======
+### Credits & References
+
 ### Demo
 ... Show your work:
 ...     Data visualizations
@@ -185,3 +237,56 @@ The listed horse weight is based on the handicap system and decides the weight t
 =======
 ### Credits & References
 >>>>>>> origin/main
+
+### Demo
+... Show your work:
+...     Data visualizations
+...     Interactive demo (e.g., `streamlit` app)
+...     Short video of users trying out the solution
+
+### Methodology
+... High-level diagrams of entire process:
+...     various data processing steps
+...     various modelling directions
+...     various prototyping directions
+
+#### Repository 
+
+* `data` 
+    - contains link to copy of the dataset (stored in a publicly accessible cloud storage)
+    - saved copy of aggregated / processed data as long as those are not too large (> 10 MB)
+
+* `model`
+    - `joblib` dump of final model(s)
+
+* `notebooks`
+    - contains all final notebooks involved in the project
+
+* `docs`
+    - contains final report, presentations which summarize the project
+
+* `references`
+    - contains papers / tutorials used in the project
+
+* `src`
+    - Contains the project source code (refactored from the notebooks)
+
+* `.gitignore`
+    - Part of Git, includes files and folders to be ignored by Git version control
+
+* `conda.yml`
+    - Conda environment specification
+
+* `README.md`
+    - Project landing page (this page)
+
+* `LICENSE`
+    - Project license
+
+#### Dataset
+
+... Google Drive links to datasets and pickled models
+
+### Credits & References
+
+... Include any personal learning
