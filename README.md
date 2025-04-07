@@ -109,32 +109,39 @@ Please be aware, the prices provided are the SP (starting prices), and they are 
 The listed horse weight is based on the handicap system and decides the weight the horse needs too carry in order to make the race more even, its very common in UK/IRE horse racing. It is not a measurement of the actual horses weight.
 
 ### Demo
-... Show your work:
-...     Exploratory Data Analysis
+Exploratory Data Analysis
 
 ![Distribution of Injured](docs/figures/distribution_injury_risk.png)
+
 We can see that our overall data is largely skewed, having nowhere near a balanced set of horses injured versus non injured. While we do our exploration this is fine; however important to note for modelling, as if we start to discover difficulty with model accuracy, performing SMOTE to balance the classes might benefit our final model.
 
 
 ![Distribution of Age](docs/figures/age.png)
+
 Risk injury based off of age seems to be pretty evenely distributed with some outliers and the eldest age of 17 being the most frequent to encounter injuries, as expected.
 
 ![Proportion of Injuries Based on Track Conditions](docs/figures/proportion_track.png)
+
 Here we see that the most frequent occurences of injuries land on track conditions surrounding soft surfaces which reading into literature one can find that horses with sensitive tendons suffer more on soft surfaces. 
 
 ![Injured Based on Track Distance](docs/figures/distance.png)
+
 We can also see the injuries of horses lie mostly within races of around 3000 to 5000 meters.
 
 ![Handicap and Weight Evaluation](docs/figures/weight.png)
+
 With all of this information regarding 'handicap' and 'weight' we can come to some important inferences regarding our dataset. The handicap system works in the UK by assigning horses with the highest ratings to carry the heaviest weights as a way to "even out" the playing field. This weight includes the jockey, saddle, equipment, lead weights, etc. Here we see that injufies start to spike up after 76 kgs. We knoe that in traditional flat racing make handicap weight is 50 - 65 kg and in national hunt racing it lands around 60 - 75 kg. This means that these horses are most likley getting injured in amateur races where the handicap weight goes over 76 kgs.
 
 ![Seasonality Trends in Injury](docs/figures/months.png)
+
 This is very important because now we see that there is in fact more injuries per race during the winter months. Through literature, we discovered that this can be due to winter related risks such as Muscle Stiffness , Reduced Flexibility , Slippery due to Ice , Longer Warm-Ups , and Reduced Training.
 
 ![Distribution of Days Rested](docs/figures/days_rested.png)
+
 We see there is a pattern of 7 day  , 14 day , 21 day, interval spikes for days rested.
 
 ![Distribution of Injured Based on Number of Races Raced](docs/figures/races_raced.png)
+
 There is a spike of injuries increasing around 20 through 25 races; therefore this seems to be a cap of when horses start to become weak. However, after 25 races there seems to be information on certain horses who were able to pass that cap and surprisingly raise no injuries while reaching up to 35 races in the year! This is an intersting subset of horses we can look deeper into.
 
 
@@ -142,36 +149,40 @@ There is a spike of injuries increasing around 20 through 25 races; therefore th
 ...     Short video of users trying out the solution
 
 ### Methodology
-... High-level diagrams of entire process:
-...     1. Looked through and cleaned 2 CSV's (race and horse)
-                horses_df cleaning:
-                 drop unneccessary columns
-                 normalize numerical values
-                 fill missing values
+1. Looked through and cleaned 2 CSV's (race and horse)
+    horses_df cleaning:
+    drop unneccessary columns
+    normalize numerical values
+    fill missing values
 
-                races_df cleaning:
-                     drop unneccessary columns
-                     normalize numerical values
-                     convert categorical variables
-        2. Merged both data frames
-        3. Created small df of horse's name with Unique ID
-        4. Exploratory Data Analysis
-            Visualized Distributions of Injured and Non-Injured Data
-            Correlations of My Features to Risk of Injury
-            Visualizations of How Injury Risk is Related to:
-                Age
-                Track Conditions
-                Distance of Race
-                Weight Distributions
-                Time Series
-                Days Rested
-                Number of Races
-            Analyzed Subset of Horses Who Had No Injuries and High Race Count
-...     5. Modelling directions:
-            LogReg ( base , gridsearched )
-            Random Forest (base , gridsearched , threshold tuned )
-            XGBoost (base , gridsearched , threshold tuned )
-...     6. Prototyping directions: working with Streamlit App to create a simulation of how the model works
+    races_df cleaning:
+    drop unneccessary columns
+    normalize numerical values
+    convert categorical variables
+    
+2. Merged both data frames
+
+3. Created small df of horse's name with Unique ID
+
+4. Exploratory Data Analysis
+    Visualized Distributions of Injured and Non-Injured Data
+    Correlations of My Features to Risk of Injury
+    Visualizations of How Injury Risk is Related to:
+        Age
+        Track Conditions
+        Distance of Race
+        Weight Distributions
+        Time Series
+        Days Rested
+        Number of Races
+        Analyzed Subset of Horses Who Had No Injuries and High Race Count
+
+5. Modelling directions:
+    LogReg ( base , gridsearched )
+    Random Forest (base , gridsearched , threshold tuned )
+    XGBoost (base , gridsearched , threshold tuned )
+
+6. Prototyping directions: working with Streamlit App to create a simulation of how the model works
 
 #### Repository 
 
@@ -209,6 +220,7 @@ There is a spike of injuries increasing around 20 through 25 races; therefore th
 #### Dataset
 
 Pickled Model:
+xgboost_smote_gridsearch_model.pkl under models folder
 
 Kaggle Dataset: 
 https://www.kaggle.com/datasets/hwaitt/horse-racing
