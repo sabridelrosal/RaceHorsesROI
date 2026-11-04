@@ -1,230 +1,115 @@
-# Capstone Project: Predicting UK Racehorses' Risk of Injury Based on Historical Race and Biometric Data
+# UK Racehorse Non-Finishing Risk - BrainStation Capstone
 
-Future Plans for Project:
-- work with Ensemble Learning to raise accuracy and fix overfitting
-- incorporate more csv's from other years to increase my dataset 
+This project started with a question about racehorse welfare: could historical race data help identify horses at risk of not finishing a race?
 
-INTRODUCTION: 
-This machine learning project hopes to predict UK racehorse injury and decline in peformice using biometric and historical race data. 
+I used Python to clean and combine horse and race data, explore patterns, and compare classification models. Non-finishing is the model's target. I used it as an injury-risk proxy, but the dataset has no veterinary records, and a horse can fail to finish for reasons other than injury. This is not a validated injury predictor.
 
-Problem Area:
-Horse racing is an expensive and well-sought after sport to watch and participate in. Racehorses go through intense physical activity during their events which can quickly lead to performance decline and at times severe injury due to stress. By predicting injuries in these horses, we can ensure better health for them and in turn mitigate outrageous costs to their owners, and in contrast, even facilitate in their economics wins. 
+## Data
 
-Who is Affected:
-- Horse Trainers can optimize training and race schedules
-- Jockeys can have a better grasp of how their horse is going to be racing day of
-- Owners can manage costs and maximize success of their horses
-- Veterinarians can possibly use this as helpful insight when caring for the horses
+The source is the [Horse Racing dataset on Kaggle](https://www.kaggle.com/datasets/hwaitt/horse-racing). The project uses historical race and horse records, with variables including age, official rating, carried weight, race distance, track condition, days rested, and race count.
 
-Impact of the Project:
-- Optimize training schedules
-- Reduce injury frequency
-- Financially helpful
+The source records a finishing position of `40` when a horse did not finish. In my cleaning notebook, I recoded that value to `0` and used `position == 0` to create the binary target called `RiskOfInjury` in the code. That variable name reflects my original project framing; it does not mean the data confirms an injury.
 
-Data Science Goal:
-1. Create a model that can predict race position before incorporating biometric factors
-2. Build a predictive model that can help identify injury rish based on performance trends.
+**Two data limits worth noting:**
+- Weight is the handicap weight carried in the race, not the horse's body weight.
+- Starting prices are not necessarily available before a race. Any future pre-race use would need a careful check of when each input becomes available.
 
-Key Variables: 
+## What I did
 
-Inputs : 
-Age
-Start Position (saddle)
-Official Rating
-Weight
-Hurdles
-Distance
-Track Condition
-Class
-Fences
-Days Rested
-Races Ran
-Day of the Year
+- Cleaned and merged race and horse records in Python.
+- Explored class balance and patterns across race and horse variables.
+- Compared logistic regression, random forest, and XGBoost models, including parameter search and threshold tuning.
+- Used SMOTE to address class imbalance during modeling.
+- Evaluated the selected model on a held-out test set.
+- Built a Streamlit prototype to explore model predictions.
 
-Output : 
-Risk of Injury (yes or no)
+## Results and limitations
 
-3 Main CSV's Used for This Project
+For the threshold-adjusted XGBoost model with SMOTE and parameter search, the held-out test results were:
 
-1. BEFORE THE RACE PARAMS:
-pre_racehorse_df:
-contains information collected prior a race starts. The odds are averages from from Oddschecker.com, RPRc and TRc also have current values.
+| Metric | Value |
+| --- | ---: |
+| Recall on non-finishing cases | 0.93 |
+| Precision on non-finishing flags | 0.18 |
+| Accuracy | 0.67 |
 
-2. RACE PARAMS YEARLY:
-race(year):
-rid - Race id;
-course - Course of the race, country code in brackets, AW means All Weather, no brackets means UK;
-time - Time of the race in hh:mm format, London TZ;
-date - Date of the race;
-title - Title of the race;
-rclass - Race class;
-band - Band;
-ages - Ages allowed
-distance - Distance;
-condition - Surface condition;
-hurdles - Hurdles, their type and amount;
-prizes - Places prizes;
-winningTime - Best time shown;
-prize - Prizes total (sum of prizes column);
-metric - Distance in meters;
-countryCode - Country of the race;
-ncond - condition type (created from condition feature);
-class - class type (created from rclass feature)
+The model caught most non-finishing cases in that test set, but only 18% of its flags matched the non-finishing label. Most flags were false alarms. The chosen threshold prioritizes catching non-finishing cases over avoiding false alarms.
 
-3. HORSE PARAMS YEARLY:
-horse(year):
-horses_* columns description:
+These numbers describe the non-finishing proxy, not confirmed injuries. The evaluation used a random holdout rather than a time-based split, so it does not establish how well the model would predict future races. The project does not demonstrate injury prevention, medical usefulness, or betting returns.
 
-rid - Race id;
-horseName - Horse name;
-age - Horse age;
-saddle - Saddle # where horse starts;
-decimalPrice - 1/Decimal price;
-isFav - Was horse favorite before start? Can be more then one fav in a race;
-trainerName - Trainer name;
-jockeyName - Jockey name;
-position - Finishing position, 40 if horse didn't finish;
-positionL - how far a horse has finished from the pursued horse, horses corpses;
-dist - how far a horse has finished from a winner, horses corpses;
-weightSt - Horse weight in St;
-weightLb - Horse weight in Lb;
-overWeight - Overweight code;
-outHandicap - Handicap;
-headGear - Head gear code;
-RPR - RP Rating;
-TR - Topspeed;
-OR - Official Rating
-father - Horse's Father name;
-mother - Horse's Mother name;
-gfather - Horse's Grandfather name;
-runners - Runners total;
-margin - Sum of decimalPrices for the race;
-weight - Horse weight in kg;
-res_win - Horse won or not;
-res_place - Horse placed or not
+## Exploratory analysis
 
-NOTES: 
-Please be aware, the prices provided are the SP (starting prices), and they are not available before race starts. This means prices before start may differ from SP. But usually favorites stay the same, and prices on them often higher then SP. Anyway you can't predict profit with accuracy based only on SP prices.
+The plots below come from the original project. Some titles and filenames still use the original injury-risk wording. In every case, the label means non-finishing, not a confirmed injury. These are descriptive patterns, not evidence of causes.
 
-The listed horse weight is based on the handicap system and decides the weight the horse needs too carry in order to make the race more even, its very common in UK/IRE horse racing. It is not a measurement of the actual horses weight.
+### Class balance
 
-### Demo
-Exploratory Data Analysis
+![Distribution of the non-finishing proxy](docs/figures/distribution_injury_risk.png)
 
-![Distribution of Injured](docs/figures/distribution_injury_risk.png)
+Non-finishing cases are the minority class, which made precision and recall important alongside accuracy.
 
-We can see that our overall data is largely skewed, having nowhere near a balanced set of horses injured versus non injured. While we do our exploration this is fine; however important to note for modelling, as if we start to discover difficulty with model accuracy, performing SMOTE to balance the classes might benefit our final model.
+### Age
 
+![Age distribution in the race data](docs/figures/age.png)
 
-![Distribution of Age](docs/figures/age.png)
+I explored how the proxy varies across ages. Small groups and outliers need caution; this plot does not establish age-related injury risk.
 
-Risk injury based off of age seems to be pretty evenely distributed with some outliers and the eldest age of 17 being the most frequent to encounter injuries, as expected.
+### Track condition
 
-![Proportion of Injuries Based on Track Conditions](docs/figures/proportion_track.png)
+![Non-finishing proxy by track condition](docs/figures/proportion_track.png)
 
-Here we see that the most frequent occurences of injuries land on track conditions surrounding soft surfaces which reading into literature one can find that horses with sensitive tendons suffer more on soft surfaces. 
+I compared the proxy across recorded track conditions. Differences can reflect other race characteristics and do not show that a surface caused an injury.
 
-![Injured Based on Track Distance](docs/figures/distance.png)
+### Distance
 
-We can also see the injuries of horses lie mostly within races of around 3000 to 5000 meters.
+![Non-finishing proxy by race distance](docs/figures/distance.png)
 
-![Handicap and Weight Evaluation](docs/figures/weight.png)
+I explored non-finishing outcomes across race distances without treating the pattern as a causal relationship.
 
-With all of this information regarding 'handicap' and 'weight' we can come to some important inferences regarding our dataset. The handicap system works in the UK by assigning horses with the highest ratings to carry the heaviest weights as a way to "even out" the playing field. This weight includes the jockey, saddle, equipment, lead weights, etc. Here we see that injufies start to spike up after 76 kgs. We knoe that in traditional flat racing make handicap weight is 50 - 65 kg and in national hunt racing it lands around 60 - 75 kg. This means that these horses are most likley getting injured in amateur races where the handicap weight goes over 76 kgs.
+### Carried weight
 
-![Seasonality Trends in Injury](docs/figures/months.png)
+![Carried weight and the non-finishing proxy](docs/figures/weight.png)
 
-This is very important because now we see that there is in fact more injuries per race during the winter months. Through literature, we discovered that this can be due to winter related risks such as Muscle Stiffness , Reduced Flexibility , Slippery due to Ice , Longer Warm-Ups , and Reduced Training.
+This variable describes weight carried under the handicap system. It is not body weight, and this analysis does not establish a safe weight threshold.
 
-![Distribution of Days Rested](docs/figures/days_rested.png)
+### Seasonality
 
-We see there is a pattern of 7 day  , 14 day , 21 day, interval spikes for days rested.
+![Non-finishing proxy by month](docs/figures/months.png)
 
-![Distribution of Injured Based on Number of Races Raced](docs/figures/races_raced.png)
+I explored monthly patterns. The data alone cannot establish weather-related injury causes.
 
-There is a spike of injuries increasing around 20 through 25 races; therefore this seems to be a cap of when horses start to become weak. However, after 25 races there seems to be information on certain horses who were able to pass that cap and surprisingly raise no injuries while reaching up to 35 races in the year! This is an intersting subset of horses we can look deeper into.
+### Rest intervals
 
+![Distribution of days rested](docs/figures/days_rested.png)
 
-...     Interactive demo (e.g., `streamlit` app)
-...     Short video of users trying out the solution
+I looked at the distribution of rest intervals, including the weekly scheduling patterns visible in the data.
 
-### Methodology
-1. Looked through and cleaned 2 CSV's (race and horse)
-    horses_df cleaning:
-    drop unneccessary columns
-    normalize numerical values
-    fill missing values
+### Race count
 
-    races_df cleaning:
-    drop unneccessary columns
-    normalize numerical values
-    convert categorical variables
-    
-2. Merged both data frames
+![Non-finishing proxy by race count](docs/figures/races_raced.png)
 
-3. Created small df of horse's name with Unique ID
+I explored race count alongside the proxy. This does not establish a fatigue threshold or a safe number of races.
 
-4. Exploratory Data Analysis
-    Visualized Distributions of Injured and Non-Injured Data
-    Correlations of My Features to Risk of Injury
-    Visualizations of How Injury Risk is Related to:
-        Age
-        Track Conditions
-        Distance of Race
-        Weight Distributions
-        Time Series
-        Days Rested
-        Number of Races
-        Analyzed Subset of Horses Who Had No Injuries and High Race Count
+## Repository guide
 
-5. Modelling directions:
-    LogReg ( base , gridsearched )
-    Random Forest (base , gridsearched , threshold tuned )
-    XGBoost (base , gridsearched , threshold tuned )
+- `notebooks/`: cleaning, exploration, and modeling work.
+- `data/`: project data resources.
+- `models/`: saved model, including `xgboost_smote_gridsearch_model.pkl`.
+- `docs/`: project figures and supporting materials.
+- `references/`: supporting reading.
+- `app.py`: Streamlit prototype.
+- `capstone_env.yml`: environment specification.
 
-6. Prototyping directions: working with Streamlit App to create a simulation of how the model works
+## Running the prototype
 
-#### Repository 
+The prototype is not yet verified as portable. `app.py` currently contains an image path specific to my laptop. That path needs to be changed and the app tested end to end before I can give reliable setup instructions.
 
-* `data` 
-    - contains link to copy of the dataset (stored in a publicly accessible cloud storage)
-    - saved copy of aggregated / processed data as long as those are not too large (> 10 MB)
+## What I would improve next
 
-* `model`
-    - `joblib` dump of final model(s)
+- Use a time-based evaluation to test on later races.
+- Review every feature for pre-race availability and possible leakage.
+- Investigate why horses did not finish rather than treating all non-finishing outcomes as injuries.
+- Test the prototype in a clean environment and document the setup.
 
-* `notebooks`
-    - contains all final notebooks involved in the project
+## Acknowledgments
 
-* `docs`
-    - contains final report, presentations which summarize the project
-
-* `references`
-    - contains papers / tutorials used in the project
-
-* `src`
-    - Contains the project source code (refactored from the notebooks)
-
-* `.gitignore`
-    - Part of Git, includes files and folders to be ignored by Git version control
-
-* `conda.yml`
-    - Conda environment specification
-
-* `README.md`
-    - Project landing page (this page)
-
-* `LICENSE`
-    - Project license
-
-#### Dataset
-
-Pickled Model:
-xgboost_smote_gridsearch_model.pkl under models folder
-
-Kaggle Dataset: 
-https://www.kaggle.com/datasets/hwaitt/horse-racing
-
-### Credits & References
-
-Thank you to BrainStation, Stephen, Borna, and Miranda for helping me and guiding me through this learning process for the past 12 weeks.
+Thank you to BrainStation, Stephen, Borna, and Miranda for their guidance during the 12-week program.
