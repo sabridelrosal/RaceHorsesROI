@@ -57,11 +57,10 @@ condition_map = df[['condition', 'ncond']].drop_duplicates().set_index('conditio
 inverse_condition_map = {v: k for k, v in condition_map.items()}
 
 # Title and intro
-st.markdown("<h1 style='text-align: center; font-family: 'Georgia', serif;'>🏇Racehorse Injury Risk Predictor🏇</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; font-family: 'Georgia', serif;'>Racehorse Non-Finishing Risk Prototype</h1>", unsafe_allow_html=True)
 st.write("**Author:** Sabrina del Rosal")
 st.markdown("""
-Horse racing is an expensive and highly competitive sport. Racehorses undergo intense physical stress, which can lead to performance decline or even injury.  
-By predicting injury risks, we can ensure better health for the horses and reduce costs for owners—while also supporting performance optimization.
+This student project models non-finishing outcomes using historical race data. Non-finishing is an injury-risk proxy, not a confirmed injury label. This prototype is not validated for veterinary, training or race-readiness decisions.
 """)
 
 # Horse selector
@@ -121,23 +120,12 @@ model_input = input_df.drop(columns=['condition'])
 assert model_input.dtypes.apply(lambda x: x in ['int64', 'float64', 'int32', 'float32']).all(), "Non-numeric values in input!"
 
 # Predict when button is clicked
-if st.button("Predict Injury Risk"):
+if st.button("Estimate non-finishing risk"):
     # Perform prediction
     prediction = model.predict(model_input)[0]
-    prob = model.predict_proba(model_input)[0][1]  # Probability of injury
+    prob = model.predict_proba(model_input)[0][1]  # Model score for non-finishing
 
-    # Display Prediction and Results
-    st.markdown(f"### 🩺 **Prediction**: {'⚠️ At Risk' if prediction == 1 else '✅ Not at Risk'}")
-    st.write(f"**Probability of Injury:** `{prob:.2%}`")
-
-    # Display result based on prediction
-    if prediction == 1:
-        st.markdown("### 💤 **This horse needs a break!**")
-        st.markdown("🚫🐎 *Better let them rest before the next race.*")
-        st.image("docs/horse-resting.gif", width=300)  # cute horse resting gif
-
-    else:
-        st.markdown("### 🏇 **This horse is ready to race!**")
-        st.markdown("✅🐴 *Giddy up! This one is in top shape.*")
-        st.balloons()  # Celebration balloons when the horse is fit to race
-        #st.image("docs/giphy.gif", width=300)  # cute horse running gif
+    # Display the non-finishing proxy output, without health or race-readiness advice
+    st.markdown(f"### **Non-finishing flag**: {'Yes' if prediction == 1 else 'No'}")
+    st.write(f"**Model score for non-finishing:** `{prob:.2%}`")
+    st.markdown("This is a model output for the non-finishing proxy, not a health or race-readiness assessment.")
