@@ -101,7 +101,7 @@ I explored race count alongside the proxy. This does not establish a fatigue thr
 
 ## Running the prototype
 
-The prototype is not yet verified as portable. `app.py` currently contains an image path specific to my laptop. That path needs to be changed and the app tested end to end before I can give reliable setup instructions.
+The laptop-specific banner image path has been replaced with a repository-relative path. In a local smoke test, the Streamlit page loaded and a prediction completed without exceptions. The saved XGBoost model produced a version warning. This confirms a basic app run only, not model validity or portability across environments.
 
 ## What I would improve next
 
