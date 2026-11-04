@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import pickle
+from pathlib import Path
 
 
 
@@ -46,7 +47,7 @@ def load_data():
 df = load_data()
 
 # Absolute path to your image file
-img_path = "/Users/sabrinadelrosal/Documents/MyCapstoneProject/docs/horse-image.jpeg"
+img_path = Path(__file__).resolve().parent / "docs" / "horse-image.jpeg"
 
 # Top Banner with Image using st.image
 st.image(img_path, width=700, use_container_width=True)
@@ -140,4 +141,3 @@ if st.button("Predict Injury Risk"):
         st.markdown("✅🐴 *Giddy up! This one is in top shape.*")
         st.balloons()  # Celebration balloons when the horse is fit to race
         #st.image("docs/giphy.gif", width=300)  # cute horse running gif
-
